@@ -1,0 +1,14 @@
+{
+  "name": "ice-breaker",
+  "version": "0.0.1",
+  "description": "Parse WebRTC ICE Candidates string",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "webrtc"
+  ],
+  "author": "Maria Fernandez",
+  "license": "ISC"
+}
