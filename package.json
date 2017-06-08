@@ -4,7 +4,7 @@
   "description": "Parse WebRTC ICE Candidates string",
   "main": "src/ice-breaker",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "nyc ./node_modules/.bin/mocha --reporter spec"
   },
   "keywords": [
     "webrtc",
@@ -14,6 +14,7 @@
   "author": "Maria Fernandez <mariafehe@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "chai": "^4.0.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-config-airbnb-base": "^11.2.0",
@@ -29,6 +30,8 @@
     "gulp-eslint": "^3.0.1",
     "gulp-help": "^1.6.1",
     "gulp-if": "^2.0.2",
+    "mocha": "^3.4.2",
+    "nyc": "^11.0.2",
     "yargs": "^8.0.1"
   },
   "dependencies": {
