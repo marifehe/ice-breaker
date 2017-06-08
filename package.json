@@ -1,6 +1,6 @@
 {
   "name": "ice-breaker",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Parse WebRTC ICE Candidates string",
   "main": "lib/ice-breaker.js",
   "repository": {
@@ -15,7 +15,9 @@
   "keywords": [
     "webrtc",
     "ice",
-    "candidate"
+    "icecandidate",
+    "stun",
+    "turn"
   ],
   "author": "Maria Fernandez <mariafehe@gmail.com>",
   "license": "MIT",
