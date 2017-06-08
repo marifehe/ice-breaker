@@ -1,2 +1,20 @@
 # es6 code
 src/
+
+# tests
+test
+
+# gulp
+gulp
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# nyc test coverage
+.nyc_output
+
+# gulp
+gulpfile.js
+
+# eslint
+.eslintrc.js
