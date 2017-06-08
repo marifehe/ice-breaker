@@ -5,9 +5,7 @@ const path = require('path');
 const gulp = require('gulp-help')(require('gulp'));
 const HELP_TABLE = {
   lint: { description: 'Lint files',
-    options: { fail: 'fail process if lint errors exist' } },
-  'test-unit': { description: 'Run unit tests',
-    options: { f: 'Test specific module' } }
+    options: { fail: 'fail process if lint errors exist' } }
 };
 
 /**
