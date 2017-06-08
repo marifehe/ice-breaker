@@ -1,6 +1,6 @@
 {
   "name": "ice-breaker",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Parse WebRTC ICE Candidates string",
   "main": "lib/ice-breaker.js",
   "repository": {
