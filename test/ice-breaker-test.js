@@ -25,7 +25,7 @@ describe('IceBreaker', () => {
     it('should return an object with the matched fields from the ice candidate', () => {
       // Arrange
       const expectedCandidateJson = {
-        foundation: '10',
+        foundation: 'remote-10',
         componentId: '1',
         transport: 'UDP',
         priority: '1845494271',

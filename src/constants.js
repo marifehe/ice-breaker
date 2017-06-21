@@ -106,7 +106,7 @@ CANDIDATE_TYPE += `${TOKEN}`;
 
 const pattern = {
   COMPONENT_ID: '[0-9]{1,5}',
-  FOUNDATION: '[a-zA-Z0-9\\+\\/]+',
+  FOUNDATION: '[a-zA-Z0-9\\+\\/\\-]+',
   PRIORITY: '[0-9]{1,10}',
   TRANSPORT: `${transport.UPD}|${TOKEN}`,
   CONNECTION_ADDRESS: `${IPV4ADDR}|${IPV6ADDR}`,
