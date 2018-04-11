@@ -4,22 +4,43 @@
 /* eslint-disable no-unused-expressions */
 
 const chai = require('chai');
+const sinon = require('sinon');
+const sinonChai = require('sinon-chai');
 const IceBreaker = require('../src/ice-breaker');
 
 const expect = chai.expect;
+chai.use(sinonChai);
 
 describe('IceBreaker', () => {
+  let sinonSandbox;
+  beforeEach(() => {
+    sinonSandbox = sinon.sandbox.create();
+  });
+
+  afterEach(() => {
+    // Restore all the things made through the sandbox
+    sinonSandbox.restore();
+  });
+
   describe('toJson()', () => {
+    it('should call candidateToJson', () => {
+      const candidateToJsonStub = sinonSandbox.stub(IceBreaker, 'candidateToJson').callsFake(() => {});
+      IceBreaker.toJson(1)
+      expect(candidateToJsonStub).to.have.been.calledWith(1);
+    });
+  });
+
+  describe('candidateToJson()', () => {
     it('should return null if no ice candidate is received', () => {
-      expect(IceBreaker.toJson()).to.be.null;
+      expect(IceBreaker.candidateToJson()).to.be.null;
     });
 
     it('should return null if the type of the ice candidate received is not a string', () => {
-      expect(IceBreaker.toJson(1)).to.be.null;
+      expect(IceBreaker.candidateToJson(1)).to.be.null;
     });
 
     it('should return null if no matching fields are received in the ice candidate string', () => {
-      expect(IceBreaker.toJson('not the right format')).to.be.null;
+      expect(IceBreaker.candidateToJson('not the right format')).to.be.null;
     });
 
     it('should return an object with the matched fields from the ice candidate', () => {
@@ -47,7 +68,7 @@ describe('IceBreaker', () => {
         `rport ${expectedCandidateJson.remotePort}`;
 
       // Act
-      const actualCandidatejson = IceBreaker.toJson(iceCandidate);
+      const actualCandidatejson = IceBreaker.candidateToJson(iceCandidate);
       expect(actualCandidatejson).to.deep.equal(expectedCandidateJson);
     });
 
@@ -72,8 +93,82 @@ describe('IceBreaker', () => {
         `typ ${expectedCandidateJson.candidateType} `;
 
       // Act
-      const actualCandidatejson = IceBreaker.toJson(iceCandidate);
+      const actualCandidatejson = IceBreaker.candidateToJson(iceCandidate);
       expect(actualCandidatejson).to.deep.equal(expectedCandidateJson);
     });
   });
+
+  describe('filterSDPCandidatesByTransport()', () => {
+    it('should return an unchanged sdp if it is not a string', () => {
+      const sdp = 1;
+      const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp);
+      expect(filteredSdp).to.equal(sdp);
+    });
+
+    it('should return an unchanged sdp if no filter is provided', () => {
+      const sdp = 'an-sdp-file';
+      const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp);
+      expect(filteredSdp).to.equal(sdp);
+    });
+
+    it('should return an unchanged sdp if no valid filter (invalid format) is provided', () => {
+      const sdp = 'an-sdp-file';
+      const invalidFilter = 1;
+      const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, invalidFilter);
+      expect(filteredSdp).to.equal(sdp);
+    });
+
+    it('should return an unchanged sdp if no valid filter (invalid transport) is provided', () => {
+      const sdp = 'an-sdp-file';
+      const invalidFilter = 'invalid-transport';
+      const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, invalidFilter);
+      expect(filteredSdp).to.equal(sdp);
+    });
+
+    it('should filter TCP candidates if TCP transport is passed in the filter', () => {
+      // Arrange
+      const sdp = 'a=sendonly\r\n' +
+        'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
+        'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
+      const validFilter = IceBreaker.transport.TCP;
+      
+      // Act
+      const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, validFilter);
+      
+      // Assert
+      expect(filteredSdp).to.contain('a=sendonly');
+      expect(filteredSdp).to.not.contain('a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n');
+      expect(filteredSdp).to.contain('a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n');
+    });
+
+    it('should filter UDP candidates if UDP transport is passed in the filter', () => {
+      // Arrange
+      const sdp = 'a=sendonly\r\n' +
+        'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
+        'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
+      const validFilter = IceBreaker.transport.UDP;
+      
+      // Act
+      const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, validFilter);
+      
+      // Assert
+      expect(filteredSdp).to.contain('a=sendonly\r\n');
+      expect(filteredSdp).to.contain('a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n');
+      expect(filteredSdp).to.not.contain('a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n');
+    });
+
+    it('should filter UDP and TCP candidates if both transports are passed in the filter', () => {
+      // Arrange
+      const sdp = 'a=sendonly\r\n' +
+        'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
+        'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
+      const validFilter = [IceBreaker.transport.UDP, IceBreaker.transport.TCP];
+      
+      // Act
+      const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, validFilter);
+      
+      // Assert
+      expect(filteredSdp).to.equal(sdp);
+    });
+  })
 });

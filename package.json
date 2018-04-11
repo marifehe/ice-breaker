@@ -1,6 +1,6 @@
 {
   "name": "ice-breaker",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Parse WebRTC ICE Candidates string",
   "main": "lib/ice-breaker.js",
   "repository": {
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "nyc mocha --reporter spec",
-    "compile": "babel --presets es2015 -d lib/ src/",
+    "compile": "babel --presets env -d lib/ src/",
     "prepublish": "npm run compile"
   },
   "keywords": [
@@ -17,13 +17,16 @@
     "ice",
     "icecandidate",
     "stun",
-    "turn"
+    "turn",
+    "sdp",
+    "tcp",
+    "udp"
   ],
   "author": "Maria Fernandez <mariafehe@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.0.2",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.0.1",
@@ -42,6 +45,8 @@
     "gulp-if": "^2.0.2",
     "mocha": "^3.4.2",
     "nyc": "^11.0.2",
+    "sinon": "^4.5.0",
+    "sinon-chai": "^3.0.0",
     "yargs": "^8.0.1"
   }
 }
