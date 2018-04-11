@@ -5,7 +5,7 @@ Ice-Breaker is a set of helper methods to ease the WebRTC Media connection proce
 
 Context
 -----
-**WebRTC (Web Real-Time Communication)** is a collection of communications protocols and application programming interfaces that enable real-time communication over peer-to-peer connections. In order for these peers on different networks to locate one another, a form of discovery and media format negotiation must take place. Each peer will need to provide ICE candidates to the remote peer. The Session Description Protocol is used in the signaling process ([RFC-4566](https://tools.ietf.org/html/rfc4566)).
+**WebRTC (Web Real-Time Communication)** is a collection of communications protocols and application programming interfaces that enable real-time communication over peer-to-peer connections. In order for these peers on different networks to locate one another, a form of discovery and media format negotiation must take place. Each peer will need to provide ICE candidates to the remote peer. The Session Description Protocol is used in this signaling process ([RFC-4566](https://tools.ietf.org/html/rfc4566)).
 
 Each ICE candidate describes a method which the originating peer is able to communicate, and each peer sends candidates in the order of discovery, until it runs out of suggestions. Once the two peers suggest a compatible candidate, media begins to flow.
 
