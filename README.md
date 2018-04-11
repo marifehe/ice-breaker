@@ -18,7 +18,7 @@ Typically, ICE candidates provide the IP address and port from where the data is
 How to use
 ----
 
-#### `candidateToJson`: convert ICE Candidates to a Json object
+#### `candidateToJson`: convert ICE Candidates to a JSON object
 
 ```javascript
 var IceBreaker = require('ice-breaker');
