@@ -36,7 +36,7 @@ class IceBreaker {
   * @returns {object} ICE candidate parsed
   */
   static toJson(iceCandidate) {
-    console.warn('This method is deprecated since version 0.0.6. Use `candidateToJson` instead.');
+    console.warn('ice-breaker WARN `toJson` method is deprecated since version 0.0.6. Use `candidateToJson` instead.');
     return this.candidateToJson(iceCandidate);
   }
 
