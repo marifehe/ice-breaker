@@ -57,6 +57,38 @@ console.log('>>> My filtered SDP: ', filteredSdp);
 */
 ```
 
+#### `getCandidatesFromSDP`: get an array of the ICE candidates present in an SDP file
+
+```javascript
+var IceBreaker = require('ice-breaker');
+
+// Please notice this is just a section of an SDP file
+var sdp = 'a=sendonly\r\n' +
+  'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
+  'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
+      
+var iceCandidates = IceBreaker.getCandidatesFromSDP(sdp);
+
+console.log('>>> ICE Candidates in my SDP file: ', iceCandidates);
+/* Should print:
+>>> ICE Candidates in my SDP file:   [ { foundation: '1',
+    componentId: '1',
+    transport: 'UDP',
+    priority: '2013266431',
+    connectionAddress: '1111::222:3aff:1111:4983',
+    port: '50791',
+    candidateType: 'host' },
+  { foundation: '2',
+    componentId: '1',
+    transport: 'TCP',
+    priority: '1019217151',
+    connectionAddress: '1111::222:3aff:1111:4983',
+    port: '9',
+    candidateType: 'host' } ]
+*/
+```
+
+---
 Thank you for using this module! Feel free to contribute :)
 
 License

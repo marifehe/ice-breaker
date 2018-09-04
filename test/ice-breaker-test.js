@@ -22,14 +22,6 @@ describe('IceBreaker', () => {
     sinonSandbox.restore();
   });
 
-  describe('toJson()', () => {
-    it('should call candidateToJson', () => {
-      const candidateToJsonStub = sinonSandbox.stub(IceBreaker, 'candidateToJson').callsFake(() => {});
-      IceBreaker.toJson(1)
-      expect(candidateToJsonStub).to.have.been.calledWith(1);
-    });
-  });
-
   describe('candidateToJson()', () => {
     it('should return null if no ice candidate is received', () => {
       expect(IceBreaker.candidateToJson()).to.be.null;
@@ -131,10 +123,10 @@ describe('IceBreaker', () => {
         'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
         'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
       const validFilter = IceBreaker.transport.TCP;
-      
+
       // Act
       const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, validFilter);
-      
+
       // Assert
       expect(filteredSdp).to.contain('a=sendonly');
       expect(filteredSdp).to.not.contain('a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n');
@@ -147,10 +139,10 @@ describe('IceBreaker', () => {
         'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
         'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
       const validFilter = IceBreaker.transport.UDP;
-      
+
       // Act
       const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, validFilter);
-      
+
       // Assert
       expect(filteredSdp).to.contain('a=sendonly\r\n');
       expect(filteredSdp).to.contain('a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n');
@@ -163,12 +155,40 @@ describe('IceBreaker', () => {
         'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
         'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
       const validFilter = [IceBreaker.transport.UDP, IceBreaker.transport.TCP];
-      
+
       // Act
       const filteredSdp = IceBreaker.filterSDPCandidatesByTransport(sdp, validFilter);
-      
+
       // Assert
       expect(filteredSdp).to.equal(sdp);
     });
-  })
+  });
+
+  describe('getCandidatesFromSDP()', () => {
+    it('should return an array with all the ICE candidates present in the provided SDP', () => {
+      // Arrange
+      const sdp = 'a=sendonly\r\n' +
+        'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
+        'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
+
+      // Act
+      const iceCandidates = IceBreaker.getCandidatesFromSDP(sdp);
+
+      // Assert
+      expect(iceCandidates.length).to.equal(2);
+      expect(iceCandidates[0].transport).to.equal('UDP');
+      expect(iceCandidates[1].transport).to.equal('TCP');
+    });
+
+    it('should return an empty array if the sdp received is not a string', () => {
+      // Arrange
+      const sdp = { id: 'not a string' };
+
+      // Act
+      const iceCandidates = IceBreaker.getCandidatesFromSDP(sdp);
+
+      // Assert
+      expect(iceCandidates).to.be.empty;
+    });
+  });
 });

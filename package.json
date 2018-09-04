@@ -1,13 +1,14 @@
 {
   "name": "ice-breaker",
-  "version": "0.0.7",
-  "description": "Parse WebRTC ICE Candidates string",
+  "version": "1.0.0",
+  "description": "Set of helper methods to ease the WebRTC Media connection process.",
   "main": "lib/ice-breaker.js",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:elbecita/ice-breaker.git"
   },
   "scripts": {
+    "lint": "eslint **/*.js",
     "test": "nyc mocha --reporter spec",
     "compile": "babel --presets env -d lib/ src/",
     "prepublish": "npm run compile"
@@ -39,10 +40,6 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.0.1",
     "eslint-plugin-standard": "^3.0.1",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^3.0.1",
-    "gulp-help": "^1.6.1",
-    "gulp-if": "^2.0.2",
     "mocha": "^3.4.2",
     "nyc": "^11.0.2",
     "sinon": "^4.5.0",
