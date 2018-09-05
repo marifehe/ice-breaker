@@ -191,4 +191,32 @@ describe('IceBreaker', () => {
       expect(iceCandidates).to.be.empty;
     });
   });
+
+  describe('getUnparsedCandidatesFromSDP()', () => {
+    it('should return an array with all the ICE candidates present in the provided SDP (as strings)', () => {
+      // Arrange
+      const sdp = 'a=sendonly\r\n' +
+        'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
+        'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
+
+      // Act
+      const iceCandidates = IceBreaker.getUnparsedCandidatesFromSDP(sdp);
+
+      // Assert
+      expect(iceCandidates.length).to.equal(2);
+      expect(iceCandidates[0]).to.equal('candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host');
+      expect(iceCandidates[1]).to.equal('candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active');
+    });
+
+    it('should return an empty array if the sdp received is not a string', () => {
+      // Arrange
+      const sdp = { id: 'not a string' };
+
+      // Act
+      const iceCandidates = IceBreaker.getUnparsedCandidatesFromSDP(sdp);
+
+      // Assert
+      expect(iceCandidates).to.be.empty;
+    });
+  });
 });

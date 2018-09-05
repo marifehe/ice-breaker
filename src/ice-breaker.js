@@ -99,7 +99,7 @@ class IceBreaker {
   }
 
   /**
-  * Returns an array of the ICE candidates present in the provided sdp.
+  * Returns an array of the ICE candidates (as objects) present in the provided sdp.
   * - The SDP must be a string, with every field in a new line. (See RFC-4566 -
   *   https://tools.ietf.org/html/rfc4566 for SDP details).
   *
@@ -115,6 +115,29 @@ class IceBreaker {
         // remove 'a='
         const candidate = l.substr(2);
         return IceBreaker.candidateToJson(candidate);
+      });
+    }
+
+    return iceCandidates;
+  }
+
+  /**
+  * Returns an array of the ICE candidates (as strings) present in the provided sdp.
+  * - The SDP must be a string, with every field in a new line. (See RFC-4566 -
+  *   https://tools.ietf.org/html/rfc4566 for SDP details).
+  *
+  * @param {string} SDP, with every field in a new line
+  * @returns {Array} ICE candidates present in the provided sdp (returned as strings)
+  */
+  static getUnparsedCandidatesFromSDP(sdp) {
+    let iceCandidates = [];
+    if (typeof sdp === 'string') {
+      const sdpLines = sdp.split('\n');
+      const iceCandidatesLines = sdpLines.filter(l => (l.indexOf('a=candidate') > -1));
+      iceCandidates = iceCandidatesLines.map((l) => {
+        // remove 'a='
+        const candidate = l.substr(2).replace('\r', '');
+        return candidate;
       });
     }
 
