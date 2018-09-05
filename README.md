@@ -1,4 +1,4 @@
-Ice-Breaker
+Ice-Breaker [![npm version](https://badge.fury.io/js/ice-breaker.svg)](https://badge.fury.io/js/ice-breaker)
 =========
 
 Ice-Breaker is a set of helper methods to ease the WebRTC Media connection process.
@@ -57,7 +57,7 @@ console.log('>>> My filtered SDP: ', filteredSdp);
 */
 ```
 
-#### `getCandidatesFromSDP`: get an array of the ICE candidates present in an SDP file
+#### `getCandidatesFromSDP`: get an array of the ICE candidates (as objects) present in an SDP file
 
 ```javascript
 var IceBreaker = require('ice-breaker');
@@ -85,6 +85,26 @@ console.log('>>> ICE Candidates in my SDP file: ', iceCandidates);
     connectionAddress: '1111::222:3aff:1111:4983',
     port: '9',
     candidateType: 'host' } ]
+*/
+```
+
+#### `getUnparsedCandidatesFromSDP`: get an array of the ICE candidates (as strings) present in an SDP file
+
+```javascript
+var IceBreaker = require('ice-breaker');
+
+// Please notice this is just a section of an SDP file
+var sdp = 'a=sendonly\r\n' +
+  'a=candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host\r\n' +
+  'a=candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active\r\n';
+      
+var iceCandidates = IceBreaker.getUnparsedCandidatesFromSDP(sdp);
+
+console.log('>>> Unparsed ICE Candidates in my SDP file: ', iceCandidates);
+/* Should print:
+>>> ICE Candidates in my SDP file:   [ 'candidate:1 1 UDP 2013266431 1111::222:3aff:1111:4983 50791 typ host',
+  'candidate:2 1 TCP 1019217151 1111::222:3aff:1111:4983 9 typ host tcptype active' ]
+
 */
 ```
 
